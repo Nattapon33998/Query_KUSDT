@@ -51,15 +51,6 @@ async function main() {
     `\n\n Wallet hold < 5,000 KUSDT && >= 1,000 : ${tier3.length} wallets, ${tier3Value} KUSDT`
   );
   console.table(tier3);
-
-  // fs.writeFile("/result.txt", "hi", (err) => {
-  //   if (err) {
-  //     console.error(err);
-  //   } else {
-  //     // file written successfully
-  //   }
-  // });
-  // fs.writeFileSync("/temp/result.txt", "Hey there!");
 }
 
 main()
