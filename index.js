@@ -1,5 +1,4 @@
 const { BBT_address, Identify_address } = require("./identifyAddress");
-const fs = require("node:fs");
 const axios = require("axios");
 
 async function main() {
