@@ -7,6 +7,6 @@ Tier3 holds < 5,000 && >= 1,000 KUSDT
 
 # How to setup
 
-step 1: clone project
-step 2: run `npm i` in terminal
-step 3: run `node index.js` in terminal
+- step 1: clone project
+- step 2: run `npm i` in terminal
+- step 3: run `node index.js` in terminal
