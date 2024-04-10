@@ -1,3 +1,5 @@
+const { BBT_address, Identify_address } = require("./identifyAddress");
+const fs = require("node:fs");
 const axios = require("axios");
 
 async function main() {
@@ -15,35 +17,49 @@ async function main() {
   let holdersB = await axios.get(
     "https://www.bkcscan.com/api/v2/tokens/0x7d984C24d2499D840eB3b7016077164e15E5faA6/holders?address_hash=0x4ed82f426f0b726635dfef92dc39e30315baa110&items_count=50&value=1.31179e%2B21"
   );
-
   holderList = [...holdersA.data.items, ...holdersB.data.items];
-
-  // console.log(holdersA.data);
-  // console.log(holderList);
-  // console.log(holderList.length);
 
   for (i in holderList) {
     const holder = holderList[i];
     const value = holder.value / 10 ** 18;
     const walletAddress = holder.address.hash;
-    console.log(`${i} ${walletAddress} : ${value}`);
-    if (value >= 10000) {
-      tier1.push(walletAddress);
-      tier1Value += value;
-    } else if (value < 10000 && value >= 5000) {
-      tier2.push(walletAddress);
-      tier2Value += value;
-    } else if (value < 5000 && value >= 1000) {
-      tier3.push(walletAddress);
-      tier3Value += value;
+    if (
+      !BBT_address.includes(walletAddress) &&
+      !Identify_address.includes(walletAddress)
+    ) {
+      if (value >= 10000) {
+        tier1.push({ Address: walletAddress, Value: value });
+        tier1Value += value;
+      } else if (value < 10000 && value >= 5000) {
+        tier2.push({ Address: walletAddress, Value: value });
+        tier2Value += value;
+      } else if (value < 5000 && value >= 1000) {
+        tier3.push({ Address: walletAddress, Value: value });
+        tier3Value += value;
+      }
     }
   }
-  console.log("Tier 1 : ", tier1);
-  console.log("Tier 2 : ", tier2);
-  console.log("Tier 3 : ", tier3);
-  console.log("Tier 1 value : ", tier1Value);
-  console.log("Tier 2 value : ", tier2Value);
-  console.log("Tier 3 value : ", tier3Value);
+  console.log(
+    `\n Wallet hold >= 10,000 KUSDT: ${tier1.length} wallets, ${tier1Value} KUSDT`
+  );
+  console.table(tier1);
+  console.log(
+    `\n\n Wallet hold < 10,000 KUSDT && >= 5,000 : ${tier2.length} wallets, ${tier2Value} KUSDT`
+  );
+  console.table(tier2);
+  console.log(
+    `\n\n Wallet hold < 5,000 KUSDT && >= 1,000 : ${tier3.length} wallets, ${tier3Value} KUSDT`
+  );
+  console.table(tier3);
+
+  // fs.writeFile("/result.txt", "hi", (err) => {
+  //   if (err) {
+  //     console.error(err);
+  //   } else {
+  //     // file written successfully
+  //   }
+  // });
+  // fs.writeFileSync("/temp/result.txt", "Hey there!");
 }
 
 main()
